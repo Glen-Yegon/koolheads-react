@@ -1,0 +1,364 @@
+
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --muted: rgba(255,255,255,0.6);
+  --card-w: 1000px; /* total card width on desktop */
+  --content-w: 750px; /* inner content width */
+  --gap: 32px;
+}
+
+
+/* Disable main scroll when product page is open */
+body.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+/* Page root — full-screen black */
+.product-page-root {
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;           /* vertical center */
+  justify-content: center;       /* horizontal center */
+  position: relative;
+  overflow-x: hidden;
+  padding: 40px 40px;
+  font-family: "Smooch Sans", sans-serif;
+}
+
+/* Central container (narrow) — does not fill full viewport */
+.product-page-container {
+  width: 100%;
+  max-width: var(--card-w);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Default desktop layout */
+.product-card {
+  width: 100%;
+  display: flex;
+  gap: var(--gap);
+  align-items: flex-start;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* RelatedProducts: right side by default */
+.related-products {
+  order: 3; /* after left and right columns */
+}
+
+/* MOBILE: stack them in order */
+@media (max-width: 900px) {
+  .product-card {
+    flex-direction: column;
+  }
+
+  .related-products {
+    order: 4; /* ensures it's below everything */
+    width: 100%;
+    max-height: none;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 2rem;
+  }
+}
+
+/* LEFT column: images */
+.left-col {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* main image — NO rounded corners */
+.main-image-wrap {
+  width: 100%;
+  background: #000;
+  border: 1px solid rgb(0, 0, 0);
+  box-sizing: border-box;
+}
+
+.main-image {
+  width: 100%;
+  height: 520px; /* fixed-ish for consistent layout on desktop */
+  object-fit: cover;
+  display: block;
+  border: 0; /* no rounding */
+  outline: none;
+}
+
+/* thumbnails grid — up to 4 per row, small squares, no rounding */
+.thumb-grid {
+  display: grid;
+  border-radius: 0;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  width: 100%;
+}
+
+.thumb-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border-radius: 0 !important; /* force remove any rounding */
+}
+
+.thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none !important;
+  border-radius: 0 !important; /* completely remove rounding */
+  outline: none !important;
+  clip-path: none !important; /* prevents curved clipping */
+  mask-image: none !important;
+}
+
+/* active thumbnail highlight */
+.thumb-btn.active {
+  outline: 2px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0 !important; /* ensure outline corners stay sharp */
+}
+
+/* RIGHT column: details */
+.right-col {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: stretch;
+  font-family: "Smooch Sans", sans-serif;
+}
+
+.product-title {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.price-row { margin-top: 4px; }
+
+.price {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--fg);
+}
+
+.shipping-link {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  align-self: flex-start;
+}
+
+/* size selector (boxy, no rounding) */
+.size-block { margin-top: 6px; }
+.size-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.size-select {
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  color: rgb(255, 255, 255);
+  background-color: #000;
+  border: 1px solid rgba(255,255,255,0.12);
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  font-family: "Smooch Sans", sans-serif;
+  font-size: 1rem;
+}
+
+/* CTA: stacked column (no rounding). Buttons full-width of column */
+.cta-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Buttons — NO rounded corners */
+.btn {
+  padding: 12px 14px;
+  border: 1px solid #fff;
+  background: transparent;
+  color: var(--fg);
+  font-family: "Orbitron", sans-serif;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  border-radius: 0; /* ensure no rounding */
+}
+
+/* Add to Cart: inverted on hover */
+.add-cart:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Buy Now: white filled */
+.buy-now {
+  background: #fff;
+  color: #000;
+  border: 1px solid #fff;
+}
+.buy-now:hover {
+  opacity: 0.9;
+}
+
+/* Description block */
+.description-block {
+  margin-top: 8px;
+  color: var(--fg);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.desc-title {
+  margin: 0 0 6px 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--fg);
+}
+
+/* Back link */
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  margin-top: 8px;
+}
+
+/* Ensure SideBrand sits left but doesn't overlap card.
+   If your SideBrand component outputs .side-brand, style it here. */
+.side-brand {
+  position: absolute;
+  left: -5%;
+  top: 40%;
+  transform: translateY(-50%) rotate(-90deg);
+  font-family: "Smooch Sans", sans-serif;
+  font-size: 1.5rem;
+  color: #fff;
+  opacity: 1;
+  letter-spacing: 4px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* HIDE SideBrand on small screens */
+@media (max-width: 900px) {
+  .side-brand { display: none; }
+}
+
+/* MOBILE: stack content, allow full page scroll, buttons big and full width */
+@media (max-width: 900px) {
+  .product-card {
+    flex-direction: column;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .left-col, .right-col {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .main-image {
+    height: auto;
+    max-height: 60vh;
+  }
+
+  .thumb-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .cta-column {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+  }
+
+  .product-page-root {
+    padding: 24px 16px;
+    align-items: flex-start; /* allow normal page flow */
+  }
+}
+
+/* SMALLER MOBILE tweaks */
+@media (max-width: 420px) {
+  .thumb-img { height: 56px; }
+  .main-image { max-height: 50vh; }
+  .product-title { font-size: 20px; }
+}
+
+/* === LOCK DESKTOP VIEW === */
+@media (min-width: 901px) {
+
+  /* only allow RelatedProducts to scroll internally */
+  .related-products {
+    max-height: 520px;
+    overflow: hidden;
+  }
+
+  .related-scroll {
+    overflow-y: auto;
+  }
+}
+
+
+
+.qty-controls, .item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0.5rem;
+}
+
+.qty-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+}
+
+.qty-btn:hover {
+  transform: scale(1.1);
+  background: #111;
+}
+
+.qty-display {
+  min-width: 30px;
+  text-align: center;
+  font-weight: 700;
+}

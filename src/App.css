@@ -1,0 +1,406 @@
+/* src/App.css */
+/* ====== FONT IMPORTS ====== */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Iceland&family=Orbitron:wght@400;500;700;900&display=swap');
+
+/* Basic reset and body */
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --accent: #f0c24b;
+}
+
+/* ==============================
+   KOOLHEADS CUSTOM SCROLLBAR
+   ============================== */
+::-webkit-scrollbar {
+  width: 8px; /* thin scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #000; /* black background */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #fff 0%, #bfbfbf 100%); /* soft white fade */
+  border-radius: 10px;
+  border: 1px solid #000; /* subtle outline */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #e0e0e0 0%, #a8a8a8 100%);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff #000000;
+}
+
+
+/* Use a preferred font — add link in public/index.html (instructions below) */
+body, html, #root {
+  height: 100%;
+  margin: 0;
+    padding: 0;
+  background-color: #000 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body{
+  background-color: #000000 !important;
+}
+
+/* ---------- LOADER ---------- */
+.loader-viewport {
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader-content {
+  text-align: center;
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+.cheetah-wrap {
+  width: min(60%, 560px);
+  max-width: 560px;
+  overflow: visible;
+  pointer-events: none;
+  filter: brightness(0) invert(1); /* make the cheetah white */
+}
+
+.cheetah-lottie {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ---------- Title (shuffling letters) ---------- */
+.loader-title {
+  letter-spacing: 0.06em;
+  margin: 0;
+  display: inline-block;
+  user-select: none;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  font-size: clamp(4.25rem, 10vw, 5.5rem);
+    font-family: 'Orbitron', sans-serif;
+  color: var(--fg);
+}
+
+.loader-letter {
+  display: inline-block;
+  min-width: 0.6ch;
+  text-align: center;
+  will-change: transform, opacity;
+  transition: transform 260ms cubic-bezier(.22,.9,.3,1), opacity 220ms;
+}
+
+.loader-letter.revealed {
+  transform: translateY(0);
+  opacity: 1;
+  color: var(--fg);
+}
+
+.loader-letter.shuffling {
+  transform: translateY(-6px) scale(0.98);
+  opacity: 0.85;
+  filter: blur(0.2px);
+}
+
+/* ---------- Fade Transitions ---------- */
+.loader-wrapper {
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+.loader-wrapper.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .cheetah-wrap {
+    width: 70%;
+  }
+  .loader-title {
+    font-size: 2.2rem;
+  }
+}
+
+/* ========== HOME PAGE ========== */
+.home-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh; /* ✅ allows the page to expand fully if content grows */
+  background: url("/public/images/l\ \(69\).jpg") no-repeat center center;
+  background-size: cover; /* ✅ ensures full coverage */
+  background-attachment: fixed; /* ✅ makes it feel cinematic (optional) */
+  color: white;
+  overflow-x: hidden; /* ✅ prevents horizontal scroll */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Dark overlay for visibility */
+.overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile background */
+@media (max-width: 768px) {
+  .home-container {
+    background: url("/public/images/l\ \(69\).jpg") no-repeat center center/cover;
+  }
+}
+
+/* Centered content container */
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Brand title */
+.brand-title {
+  font-size: clamp(2rem, 10vw, 6rem);
+  letter-spacing: 0.1em;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+.menu-box {
+  position: relative;
+  background: radial-gradient(circle at 30% 20%, rgba(0, 0, 0, 0.623), rgba(0, 0, 0, 0.9));
+  padding: 2rem 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: fit-content;
+  margin-top: 2rem;
+  text-align: left;
+  font-family: 'Smooch Sans', sans-serif;
+  color: white;
+  overflow: hidden;
+  border-radius: 50% 40% 60% 50% / 60% 40% 50% 50%; /* creates irregular droplet-like shape */
+  backdrop-filter: blur(10px);
+  animation: floatUp 2s ease-in-out, morph 6s ease-in-out infinite;
+}
+
+/* Morphing animation for the irregular shape */
+@keyframes morph {
+  0% {
+    border-radius: 50% 40% 60% 50% / 60% 40% 50% 50%;
+  }
+  50% {
+    border-radius: 40% 60% 50% 60% / 50% 60% 40% 60%;
+  }
+  100% {
+    border-radius: 50% 40% 60% 50% / 60% 40% 50% 50%;
+  }
+}
+
+/* Slight upward motion when appearing */
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.menu-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.menu-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.menu-links a:hover {
+  color: #b9b9b9;
+  transform: translateX(5px);
+}
+
+.menu-links a:hover::after {
+  width: 100%;
+}
+
+/* Social icons */
+.social-icons {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.social-icons a {
+  color: white;
+  font-size: 1.4rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #969696;
+  transform: scale(1.15);
+}
+
+/* Footer */
+.footer {
+  background: black;
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem 0 1rem;
+  position: relative;
+  font-size: 0.9rem;
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.2rem;
+  max-width: 1100px;
+    font-family: 'Smooch Sans', sans-serif;
+  margin: 0 auto;
+}
+
+.footer-links, .footer-contact {
+  display: flex;
+  flex-direction: row;
+  gap: 0.6rem;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #a3a3a3;
+}
+
+.footer-divider {
+  margin: 0.75rem 0;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* KOOLHEADS fade effect */
+.footer-bottom {
+  position: relative;
+  overflow: hidden;
+  height: 22vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Giant sunk brand text */
+.footer-bottom h2 {
+  font-size: clamp(2rem, 12vw, 10rem);
+  letter-spacing: 0.15em;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 0.9;
+  color: #ffffff; /* pure white */
+  position: relative;
+  top: 25%;
+  opacity: 1; /* make it fully visible */
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+}
+
+
+/* fade the bottom part of the text */
+.footer-bottom::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(to bottom, transparent 0%, #000 100%);
+}
+
+/* -------- Responsive Fine-Tuning -------- */
+@media (max-width: 768px) {
+  .footer-bottom {
+    height: 10vh;
+  }
+
+  .footer-bottom h2 {
+    font-size: clamp(2rem, 10vw, 6rem);
+    opacity: 1;
+    font-weight: 500;
+    transform: translateY(10%);
+  }
+}
+
+
+
+/* Animations */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
