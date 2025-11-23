@@ -1,0 +1,108 @@
+.pt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  transition: opacity 180ms ease;
+  opacity: 0;
+}
+
+.pt-overlay.active {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.pt-panels {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 9998;
+}
+
+.pt-panel {
+  position: absolute;
+  width: 0%;
+  height: 0%;
+  background: black;
+  transform-origin: center;
+  transition: width var(--panel-dur) ease-out, height var(--panel-dur) ease-out;
+}
+
+:root {
+  --panel-dur: 450ms;
+  --lottie-size: min(48vw, 520px);
+}
+
+.pt-panel.tl {
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+.pt-panel.tr {
+  top: 0;
+  right: 0;
+  transform-origin: top right;
+}
+.pt-panel.bl {
+  bottom: 0;
+  left: 0;
+  transform-origin: bottom left;
+}
+.pt-panel.br {
+  bottom: 0;
+  right: 0;
+  transform-origin: bottom right;
+}
+
+.pt-overlay.active .pt-panel {
+  width: 50%;
+  height: 50%;
+}
+
+.pt-overlay.active .pt-panel.tl { transition-delay: 0ms; }
+.pt-overlay.active .pt-panel.tr { transition-delay: 30ms; }
+.pt-overlay.active .pt-panel.bl { transition-delay: 60ms; }
+.pt-overlay.active .pt-panel.br { transition-delay: 90ms; }
+
+.pt-lottie-wrap {
+  position: absolute;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 160ms ease var(--panel-dur);
+}
+
+.pt-overlay.active .pt-lottie-wrap {
+  opacity: 1;
+}
+
+.pt-lottie-inner {
+  width: var(--lottie-size);
+  max-width: 90vw;
+  pointer-events: none;
+  filter: brightness(0) invert(1);
+  display: block;
+}
+
+.pt-lottie {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  :root { --lottie-size: min(68vw, 360px); }
+  .pt-overlay.active .pt-panel.tl,
+  .pt-overlay.active .pt-panel.tr,
+  .pt-overlay.active .pt-panel.bl,
+  .pt-overlay.active .pt-panel.br {
+    transition-delay: 0;
+  }
+}
