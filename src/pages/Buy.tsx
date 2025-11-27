@@ -1,6 +1,6 @@
 // src/pages/Buy.tsx
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "../styles/buy-page.css";
 // Paystack global type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,7 +19,6 @@ const formatCurrency = (amount: number) => `Ksh ${amount.toLocaleString()}`;
 const showSubmitButton = false; // always false
 
 const Buy: React.FC = () => {
-  const navigate = useNavigate();
   const location = useLocation();
 
   // ✅ cartItems state — use data passed via navigation or fallback to localStorage
@@ -172,7 +171,6 @@ const handleSubmitOrder = async () => {
   // Convert subtotal to cents (Paystack expects *100)
   const amountKES = subtotal * 100;
 
-  // @ts-expect-error — PaystackPop has no TS types
   const handler = PaystackPop.setup({
     key: "pk_test_b20fcb1e5eb444ed72a8c41d97484875df9374be",
     email,

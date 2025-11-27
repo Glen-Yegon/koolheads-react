@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "../styles/shop.css"; // optional, if you have styling
 import { TransitionLink } from "../components/PageTransition";
 
@@ -8,7 +7,6 @@ const CartBar: React.FC = () => {
   const [itemsCount, setItemsCount] = useState(0);
   const [total, setTotal] = useState(0);
   const currency = "Kshs.";
-  const navigate = useNavigate();
 
   // Function to update cart info
   const updateCartData = () => {
@@ -41,10 +39,6 @@ const CartBar: React.FC = () => {
     window.addEventListener("cartUpdated", handleCartUpdate);
     return () => window.removeEventListener("cartUpdated", handleCartUpdate);
   }, []);
-
-  const handleViewCart = () => {
-    navigate("/cart");
-  };
 
   return (
     <div className="cart-bar">
