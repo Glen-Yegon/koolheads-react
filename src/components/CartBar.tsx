@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/shop.css"; // optional, if you have styling
+import "../styles/Shop.css"; // optional, if you have styling
 import { TransitionLink } from "../components/PageTransition";
 
 
