@@ -4,7 +4,7 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
+const axios = require("axios");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -110,6 +110,89 @@ app.post("/api/order", async (req, res) => {
   } catch (error) {
     console.error("Server error:", error);
     return res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+
+// VERIFY PAYMENT
+app.post("/api/verify-payment", async (req, res) => {
+  const { reference, order } = req.body;
+
+  if (!reference) {
+    return res.status(400).json({ status: "error", message: "Missing reference" });
+  }
+
+  try {
+    // Verify at Paystack
+    const verifyURL = `https://api.paystack.co/transaction/verify/${reference}`;
+    const paystackRes = await axios.get(verifyURL, {
+      headers: {
+        Authorization: `Bearer ${process.env.PAYSTACK_SECRET}`,
+      },
+    });
+
+    const status = paystackRes.data.data.status;
+
+    if (status !== "success") {
+      return res.status(400).json({ status: "error", message: "Payment not completed" });
+    }
+
+    // Now process the order + send emails (reuse your /api/order logic)
+    const { contact, shipping, items, subtotal } = order;
+
+    // 1️⃣ Send admin email
+    await transporter.sendMail({
+      from: process.env.ZOHO_USER,
+      to: process.env.ZOHO_USER,
+      subject: `New PAID Order from ${contact.email}`,
+      html: `
+        <h2>New Paid Order</h2>
+        <p><strong>Payment Reference:</strong> ${reference}</p>
+        <hr/>
+        <h3>Customer Info</h3>
+        <p>Email: ${contact.email}</p>
+        <p>Phone: ${contact.phone}</p>
+        <h3>Shipping Address</h3>
+        <p>${shipping.firstName} ${shipping.lastName}</p>
+        <p>${shipping.address}, ${shipping.city}, ${shipping.country}</p>
+        <h3>Items</h3>
+        <ul>${items
+          .map(
+            (i) =>
+              `<li>${i.name} - ${i.size} x${i.quantity} = Ksh ${i.price * i.quantity}</li>`
+          )
+          .join("")}
+        </ul>
+        <h3>Total: Ksh ${subtotal}</h3>
+      `,
+    });
+
+    // 2️⃣ Send customer confirmation
+    await transporter.sendMail({
+      from: process.env.ZOHO_USER,
+      to: contact.email,
+      subject: "Your KoolHeads Order — Payment Confirmed",
+      html: `
+        <h2>Payment Successful 🎉</h2>
+        <p>Hi ${shipping.firstName},</p>
+        <p>Your payment was successful and your order is now confirmed.</p>
+        <p><strong>Reference:</strong> ${reference}</p>
+        <h3>Order Summary</h3>
+        <ul>${items
+          .map(
+            (i) =>
+              `<li>${i.name} - ${i.size} x${i.quantity} = Ksh ${i.price * i.quantity}</li>`
+          )
+          .join("")}
+        </ul>
+        <p>Total paid: Ksh ${subtotal}</p>
+      `,
+    });
+
+    return res.status(200).json({ status: "success" });
+  } catch (err) {
+    console.error("Verification error:", err.response?.data || err);
+    return res.status(500).json({ status: "error", message: "Verification failed" });
   }
 });
 
