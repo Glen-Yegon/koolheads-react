@@ -167,27 +167,109 @@ app.post("/api/verify-payment", async (req, res) => {
       `,
     });
 
-    // 2️⃣ Send customer confirmation
-    await transporter.sendMail({
-      from: process.env.ZOHO_USER,
-      to: contact.email,
-      subject: "Your KoolHeads Order — Payment Confirmed",
-      html: `
-        <h2>Payment Successful 🎉</h2>
-        <p>Hi ${shipping.firstName},</p>
-        <p>Your payment was successful and your order is now confirmed.</p>
-        <p><strong>Reference:</strong> ${reference}</p>
-        <h3>Order Summary</h3>
-        <ul>${items
+   await transporter.sendMail({
+  from: process.env.ZOHO_USER,
+  to: contact.email,
+  subject: "Your KoolHeads Order — Payment Confirmed",
+  html: `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>KoolHeads Order Confirmation</title>
+    <style>
+      body {
+        font-family: 'Helvetica', 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        color: #111111;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        border-top: 4px solid #000;
+      }
+      h1, h2, h3 {
+        margin: 0 0 15px 0;
+        font-weight: 600;
+      }
+      p {
+        margin: 0 0 15px 0;
+        line-height: 1.5;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        padding: 5px 0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .total {
+        font-weight: 700;
+        margin-top: 15px;
+        font-size: 16px;
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #888888;
+        text-align: center;
+      }
+      .brand {
+        font-size: 28px;
+        font-weight: 800;
+        color: #000;
+        text-align: center;
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+      }
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+      @media only screen and (max-width: 600px) {
+        .container {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="brand">KoolHeads</div>
+
+      <h2>Payment Successful 🎉</h2>
+      <p>Hi ${shipping.firstName},</p>
+      <p>Thank you for your order! Your payment was successfully processed and your order is now confirmed.</p>
+
+      <p><strong>Reference:</strong> ${reference}</p>
+
+      <h3>Order Summary</h3>
+      <ul>
+        ${items
           .map(
             (i) =>
               `<li>${i.name} - ${i.size} x${i.quantity} = Ksh ${i.price * i.quantity}</li>`
           )
           .join("")}
-        </ul>
-        <p>Total paid: Ksh ${subtotal}</p>
-      `,
-    });
+      </ul>
+
+      <p class="total">Total Paid: Ksh ${subtotal}</p>
+
+      <p>We will notify you once your order is shipped. For any questions, feel free to <a href="mailto:support@koolheads.com">contact us</a>.</p>
+
+      <div class="footer">
+        &copy; ${new Date().getFullYear()} KoolHeads. All rights reserved.
+      </div>
+    </div>
+  </body>
+  </html>
+  `,
+});
 
     return res.status(200).json({ status: "success" });
   } catch (err) {
