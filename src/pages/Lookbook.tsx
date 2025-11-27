@@ -4,7 +4,7 @@ import SideBrand from "../components/SideBrand";
 import Footer from "../components/Footer";
 import imageList from "../data/LookbookImages";
 
-import "../styles/Lookbook.css";
+import "../styles/lookbook.css";
 
 const Lookbook: React.FC = () => {
   const [mainImage, setMainImage] = useState<string>(imageList[0]);
