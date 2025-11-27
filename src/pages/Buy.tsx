@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/buy-page.css";
+// Paystack global type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const PaystackPop: any;
 
 type CartItem = {
   id: string;
@@ -13,6 +16,7 @@ type CartItem = {
 };
 
 const formatCurrency = (amount: number) => `Ksh ${amount.toLocaleString()}`;
+const showSubmitButton = false; // always false
 
 const Buy: React.FC = () => {
   const navigate = useNavigate();
@@ -140,35 +144,86 @@ const handleSubmitOrder = async () => {
 
 
 
-  const handlePay = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isFormValid) {
-      alert("Please complete all required fields before paying.");
-      return;
-    }
+ const handlePay = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    const order = {
-      contact: { email, phone },
-      shipping: {
-        country,
-        firstName,
-        lastName,
-        address,
-        apartment,
-        city,
-        postal,
-        shippingMethod,
-      },
-      items: cartItems,
-      subtotal,
-    };
+  if (!isFormValid) {
+    setToast({ message: "Please complete all required fields before paying.", type: "error" });
+    setTimeout(() => setToast(null), 3000);
+    return;
+  }
 
-    console.log("Order payload:", order);
-
-    localStorage.removeItem("cart");
-    window.dispatchEvent(new Event("cartUpdated"));
-    navigate("/success");
+  const orderPayload = {
+    contact: { email, phone },
+    shipping: {
+      country,
+      firstName,
+      lastName,
+      address,
+      apartment,
+      city,
+      postal,
+      shippingMethod,
+    },
+    items: cartItems,
+    subtotal,
   };
+
+  // Convert subtotal to cents (Paystack expects *100)
+  const amountKES = subtotal * 100;
+
+  // @ts-expect-error — PaystackPop has no TS types
+  const handler = PaystackPop.setup({
+    key: "pk_test_b20fcb1e5eb444ed72a8c41d97484875df9374be",
+    email,
+    amount: amountKES,
+    currency: "KES",
+    ref: "KH-" + Date.now(),
+
+callback: async (response: { reference: string }) => {
+  setToast({ message: "Verifying payment...", type: "info" });
+  setLoading(true);
+
+  try {
+    const verifyRes = await fetch("http://localhost:5000/api/verify-payment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        reference: response.reference,
+        order: orderPayload,
+      }),
+    });
+
+    const verifyData = await verifyRes.json();
+    setLoading(false);
+
+    if (verifyRes.ok && verifyData.status === "success") {
+      setToast({
+        message: "Payment successful! Check your email for confirmation.",
+        type: "success",
+      });
+
+      setTimeout(() => setToast(null), 4000);
+
+      // Clear cart after success
+      localStorage.removeItem("cart");
+      window.dispatchEvent(new Event("cartUpdated"));
+    } else {
+      setToast({ message: "Payment verification failed!", type: "error" });
+      setTimeout(() => setToast(null), 3000);
+    }
+  } catch (err) {
+    setLoading(false);
+    setToast({ message: "Server error verifying payment.", type: "error" });
+    setTimeout(() => setToast(null), 3000);
+  }
+},
+
+  });
+
+  handler.openIframe();
+};
+
 
   return (
     <div className="buy-root">
@@ -378,14 +433,18 @@ const handleSubmitOrder = async () => {
       Pay
     </button>
 
-<button
-  type="button"
-  className="pay-btn"
-  disabled={!isFormValid || cartItems.length === 0 || loading}
-  onClick={handleSubmitOrder}
->
-  {loading ? "Processing..." : "Submit"}
-</button>
+
+{showSubmitButton && (
+  <button
+    type="button"
+    className="pay-btn"
+    disabled={!isFormValid || cartItems.length === 0 || loading}
+    onClick={handleSubmitOrder}
+  >
+    {loading ? "Processing..." : "Submit"}
+  </button>
+)}
+
 
   </div>
 </div>
