@@ -111,7 +111,7 @@ const handleSubmitOrder = async () => {
   };
 
   try {
-    const res = await fetch("http://localhost:5000/api/order", {
+    const res = await fetch("https://koolheads-react.onrender.com/api/order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(order),
@@ -183,7 +183,7 @@ callback: async (response: { reference: string }) => {
   setLoading(true);
 
   try {
-    const verifyRes = await fetch("http://localhost:5000/api/verify-payment", {
+    const verifyRes = await fetch("https://koolheads-react.onrender.com/api/verify-payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
