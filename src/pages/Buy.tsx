@@ -172,7 +172,7 @@ const handleSubmitOrder = async () => {
   const amountKES = subtotal * 100;
 
   const handler = PaystackPop.setup({
-    key: "pk_test_b20fcb1e5eb444ed72a8c41d97484875df9374be",
+    key: "pk_live_7378e5741223aba5be7b295bc43825c87e39a2a8",
     email,
     amount: amountKES,
     currency: "KES",
