@@ -7,11 +7,11 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
   background-color: #000 !important;
   width: 100%;
   height: 100%;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 :root{
@@ -22,15 +22,22 @@ html, body {
   --glass-border: rgba(255,255,255,0.08);
 }
 
+html, body, .buy-root {
+  background: #000 !important;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
 
 *{box-sizing:border-box}
 body{ background-color: #000000 !important; color:var(--accent); font-family:'Smooch Sans', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0;padding:0}
 
-/* Make the entire checkout page fill the screen */
 .buy-root {
-  min-height: 100vh;
+  min-height: 90vh;
   width: 100%;
   display: flex;
+  background-color: black !important;
   justify-content: center;
   align-items: flex-start;
   padding: clamp(1rem, 3vw, 3rem);
@@ -142,7 +149,7 @@ body{ background-color: #000000 !important; color:var(--accent); font-family:'Sm
   outline:none;
   font-size:0.95rem;
 }
-.field input::placeholder{ color: rgb(255, 255, 255) }
+.field input::placeholder{ color: rgba(142, 141, 141, 0.275) }
 
 .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:0.8rem;}
 
