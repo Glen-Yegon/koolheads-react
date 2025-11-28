@@ -34,7 +34,7 @@ html, body, .buy-root {
 body{ background-color: #000000 !important; color:var(--accent); font-family:'Smooch Sans', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0;padding:0}
 
 .buy-root {
-  min-height: 90vh;
+  min-height: 110vh;
   width: 100%;
   display: flex;
   background-color: black !important;
@@ -281,10 +281,3 @@ body{ background-color: #000000 !important; color:var(--accent); font-family:'Sm
   .desktop-only{ display:block }
 }
 
-
-/* Force full black background for Buy page */
-.buy-root, body,
-.buy-container {
-  background-color: #000 !important;
-  min-height: 130vh;
-}
