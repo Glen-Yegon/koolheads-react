@@ -195,10 +195,7 @@ const ProductPage: React.FC = () => {
 
             </div>
 
-            <div className="description-block">
-              <h3 className="desc-title">Product details</h3>
-              <p className="description">{product.description}</p>
-            </div>
+
 
             <Link to="/shop" className="back-link">
               ← Back to Shop

@@ -48,26 +48,24 @@ const Buy: React.FC = () => {
   const [summaryOpen, setSummaryOpen] = useState(false);
 
   // ✅ form states
+  const [fullName, setFullName] = useState(""); // ← added
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
   const [apartment, setApartment] = useState("");
   const [city, setCity] = useState("");
-  const [postal, setPostal] = useState("");
-  const [shippingMethod, setShippingMethod] = useState("standard");
+
 
   // ✅ basic validation
   const isEmailValid = /\S+@\S+\.\S+/.test(email);
   const isPhoneValid = phone.trim().length >= 8;
+  const isFullNameValid = fullName.trim().length > 0; // ← added
   const isFormValid =
+   isFullNameValid && 
     isEmailValid &&
     isPhoneValid &&
     country.trim() &&
-    firstName.trim() &&
-    lastName.trim() &&
     address.trim() &&
     city.trim();
 
@@ -94,21 +92,22 @@ const handleSubmitOrder = async () => {
   setLoading(true);
   setToast({ message: "Processing your order, please don't close the tab...", type: "info" });
 
-  const order = {
-    contact: { email, phone },
-    shipping: {
-      country,
-      firstName,
-      lastName,
-      address,
-      apartment,
-      city,
-      postal,
-      shippingMethod,
-    },
-    items: cartItems,
-    subtotal,
-  };
+const order = {
+  contact: { 
+    fullName,   // ← added
+    email, 
+    phone 
+  },
+  shipping: {
+    country,
+    address,
+    apartment,
+    city,
+  },
+  items: cartItems,
+  subtotal,
+};
+
 
   try {
     const res = await fetch("https://koolheads-react.onrender.com/api/order", {
@@ -143,32 +142,26 @@ const handleSubmitOrder = async () => {
 
 
 
- const handlePay = (e: React.FormEvent<HTMLFormElement>) => {
+const handlePay = (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
   if (!isFormValid) {
-    setToast({ message: "Please complete all required fields before paying.", type: "error" });
+    setToast({
+      message: "Please complete all required fields before paying.",
+      type: "error",
+    });
     setTimeout(() => setToast(null), 3000);
     return;
   }
 
   const orderPayload = {
-    contact: { email, phone },
-    shipping: {
-      country,
-      firstName,
-      lastName,
-      address,
-      apartment,
-      city,
-      postal,
-      shippingMethod,
-    },
+    contact: { fullName, email, phone },
+    shipping: { country, address, apartment, city },
     items: cartItems,
     subtotal,
   };
 
-  // Convert subtotal to cents (Paystack expects *100)
+  // Convert subtotal to kobo (Paystack expects amount in minor currency unit)
   const amountKES = subtotal * 100;
 
   const handler = PaystackPop.setup({
@@ -176,51 +169,58 @@ const handleSubmitOrder = async () => {
     email,
     amount: amountKES,
     currency: "KES",
-    ref: "KH-" + Date.now(),
+    // ❌ Remove manual ref. Paystack generates it automatically
+    // ref: "KH-" + Date.now(),
 
-callback: async (response: { reference: string }) => {
-  setToast({ message: "Verifying payment...", type: "info" });
-  setLoading(true);
+    callback: async (response: { reference: string }) => {
+      console.log("Paystack callback reference:", response.reference); // ✅ log reference
+      setToast({ message: "Verifying payment...", type: "info" });
+      setLoading(true);
 
-  try {
-    const verifyRes = await fetch("https://koolheads-react.onrender.com/api/verify-payment", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        reference: response.reference,
-        order: orderPayload,
-      }),
-    });
+      try {
+        const verifyRes = await fetch("https://koolheads-react.onrender.com/api/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reference: response.reference, // use Paystack's real reference
+            order: orderPayload,
+          }),
+        });
 
-    const verifyData = await verifyRes.json();
-    setLoading(false);
+        const verifyData = await verifyRes.json();
+        setLoading(false);
 
-    if (verifyRes.ok && verifyData.status === "success") {
-      setToast({
-        message: "Payment successful! Check your email for confirmation.",
-        type: "success",
-      });
+        if (verifyRes.ok && verifyData.status === "success") {
+          setToast({
+            message: "Payment successful! Check your email for confirmation.",
+            type: "success",
+          });
+          setTimeout(() => setToast(null), 4000);
 
-      setTimeout(() => setToast(null), 4000);
+          // Clear cart
+          localStorage.removeItem("cart");
+          window.dispatchEvent(new Event("cartUpdated"));
+        } else {
+          console.error("Payment verification failed:", verifyData);
+          setToast({ message: "Payment verification failed!", type: "error" });
+          setTimeout(() => setToast(null), 3000);
+        }
+      } catch (err) {
+        console.error("Server error verifying payment:", err);
+        setLoading(false);
+        setToast({ message: "Server error verifying payment.", type: "error" });
+        setTimeout(() => setToast(null), 3000);
+      }
+    },
 
-      // Clear cart after success
-      localStorage.removeItem("cart");
-      window.dispatchEvent(new Event("cartUpdated"));
-    } else {
-      setToast({ message: "Payment verification failed!", type: "error" });
-      setTimeout(() => setToast(null), 3000);
-    }
-  } catch (err) {
-    setLoading(false);
-    setToast({ message: "Server error verifying payment.", type: "error" });
-    setTimeout(() => setToast(null), 3000);
-  }
-},
-
+    onClose: () => {
+      console.log("Paystack payment closed by user");
+    },
   });
 
   handler.openIframe();
 };
+
 
 
   return (
@@ -272,6 +272,19 @@ callback: async (response: { reference: string }) => {
         <div className="columns">
           <form className="checkout-form" onSubmit={handlePay} noValidate>
             <h2 className="section-title">Contact</h2>
+
+            <div className="field">
+  <label>
+    Full name <span className="req">*</span>
+    <input
+      value={fullName}
+      onChange={(e) => setFullName(e.target.value)}
+      required
+    />
+  </label>
+</div>
+
+
             <div className="field">
               <label>
                 Email <span className="req">*</span>
@@ -315,42 +328,21 @@ callback: async (response: { reference: string }) => {
                 </label>
               </div>
 
-              <div className="field">
-                <label>
-                  Postal code (optional)
-                  <input
-                    value={postal}
-                    onChange={(e) => setPostal(e.target.value)}
-                    placeholder="Postal code"
-                  />
-                </label>
-              </div>
+              
+            <div className="field">
+              <label>
+                City <span className="req">*</span>
+                <input
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
+
             </div>
 
             <div className="grid-2">
-              <div className="field">
-                <label>
-                  First name <span className="req">*</span>
-                  <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                  />
-                </label>
-              </div>
-
-              <div className="field">
-                <label>
-                  Last name <span className="req">*</span>
-                  <input
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    required
-                  />
-                </label>
-              </div>
-            </div>
-
             <div className="field">
               <label>
                 Address <span className="req">*</span>
@@ -374,47 +366,20 @@ callback: async (response: { reference: string }) => {
               </label>
             </div>
 
-            <div className="field">
-              <label>
-                City <span className="req">*</span>
-                <input
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  required
-                />
-              </label>
-            </div>
+              </div>
+
+
+
 
             <div className="shipping-notice">
               <strong>Shipping notice:</strong>
-              <p>
-                Standard delivery: 2-3 business days. Orders processed within
-                24 hours. For urgent deliveries, choose express at checkout (extra fees apply).
-              </p>
+<p>
+  Our team will contact you on the provided phone number regarding the delivery of your order.
+</p>
+
             </div>
 
-            <div className="shipping-method">
-              <label>
-                <input
-                  type="radio"
-                  name="ship"
-                  value="standard"
-                  checked={shippingMethod === "standard"}
-                  onChange={() => setShippingMethod("standard")}
-                />{" "}
-                Standard shipping
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="ship"
-                  value="express"
-                  checked={shippingMethod === "express"}
-                  onChange={() => setShippingMethod("express")}
-                />{" "}
-                Express shipping
-              </label>
-            </div>
+
 
 <div className="pay-section">
   <div className="pay-summary-inline">
@@ -428,7 +393,7 @@ callback: async (response: { reference: string }) => {
       className="pay-btn"
       disabled={!isFormValid || cartItems.length === 0}
     >
-      Pay
+      Complete payment
     </button>
 
 

@@ -40,6 +40,8 @@ app.post("/api/order", async (req, res) => {
     if (!contact || !shipping || !items || items.length === 0) {
       return res.status(400).json({ message: "Invalid order data" });
     }
+    
+console.log("New order payload:", req.body);
 
     // 1️⃣ Email to admin
     const adminMailOptions = {
@@ -49,14 +51,12 @@ app.post("/api/order", async (req, res) => {
       html: `
         <h2>New Order Received</h2>
         <h3>Contact Info</h3>
+        <p>Full Name: ${contact.fullName}</p>
         <p>Email: ${contact.email}</p>
         <p>Phone: ${contact.phone}</p>
         <h3>Shipping Info</h3>
-        <p>${shipping.firstName} ${shipping.lastName}</p>
         <p>${shipping.address} ${shipping.apartment || ""}</p>
         <p>${shipping.city}, ${shipping.country}</p>
-        <p>Postal: ${shipping.postal || "N/A"}</p>
-        <p>Shipping Method: ${shipping.shippingMethod}</p>
         <h3>Order Items</h3>
         <ul>
           ${items
@@ -83,7 +83,7 @@ app.post("/api/order", async (req, res) => {
       subject: "Your Order Confirmation",
       html: `
         <h2>Thanks for your order!</h2>
-        <p>Hi ${shipping.firstName},</p>
+        <p>Hi ${contact.fullName},</p>
         <p>We’ve received your order and are processing it.</p>
         <h3>Order Summary</h3>
         <ul>
@@ -140,6 +140,13 @@ app.post("/api/verify-payment", async (req, res) => {
     // Now process the order + send emails (reuse your /api/order logic)
     const { contact, shipping, items, subtotal } = order;
 
+    console.log("Order received for email:", contact.email);
+console.log("Full contact info:", contact);
+console.log("Shipping info:", shipping);
+console.log("Items:", items);
+console.log("Subtotal:", subtotal);
+
+
     // 1️⃣ Send admin email
     await transporter.sendMail({
       from: process.env.ZOHO_USER,
@@ -150,11 +157,16 @@ app.post("/api/verify-payment", async (req, res) => {
         <p><strong>Payment Reference:</strong> ${reference}</p>
         <hr/>
         <h3>Customer Info</h3>
+        <p>Full Name: ${contact.fullName}</p>
         <p>Email: ${contact.email}</p>
         <p>Phone: ${contact.phone}</p>
         <h3>Shipping Address</h3>
-        <p>${shipping.firstName} ${shipping.lastName}</p>
-        <p>${shipping.address}, ${shipping.city}, ${shipping.country}</p>
+<p>
+  ${shipping.address || "N/A"}, 
+  ${shipping.city || "N/A"}, 
+  ${shipping.country || "N/A"}${shipping.apartment ? ", " + shipping.apartment : ""}
+</p>
+
         <h3>Items</h3>
         <ul>${items
           .map(
@@ -243,7 +255,7 @@ app.post("/api/verify-payment", async (req, res) => {
       <div class="brand">KoolHeads</div>
 
       <h2>Payment Successful 🎉</h2>
-      <p>Hi ${shipping.firstName},</p>
+      <p>Hi ${contact.fullName},</p>
       <p>Thank you for your order! Your payment was successfully processed and your order is now confirmed.</p>
 
       <p><strong>Reference:</strong> ${reference}</p>
