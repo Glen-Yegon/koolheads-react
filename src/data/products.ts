@@ -1,20 +1,7 @@
 import type { Product } from "../types/Product";
 
 export const products: Product[] = [
-  {
-    id: "black-&-white-fitted-pirates",
-    name: "Black & White Fitted Pirates",
-    category: "cape",
-    type: "curved brim",
-    images: [
-      "/images/optimized/k1 (1).webp",
-      "/images/optimized/k1 (2).webp",
-      "/images/optimized/k1 (3).webp",
-      "/images/optimized/k1 (4).webp",
-    ],
-    sizes: ["7 1/4", "7 3/8", "7 1/2"],
-    description: "A cozy hoodie perfect for every day.",
-  },
+
   {
     id: "golden-sox-fitted",
     name: "Golden SOX Fitted",
@@ -84,20 +71,7 @@ export const products: Product[] = [
     sizes: ["7 1/4", "7 1/2"],
     description: "Classic denim jeans for any occasion.",
   },
-  {
-    id: "green-tone-sox-fitted",
-    name: "Green-Tone SOX Fitted",
-    category: "cape",
-    type: "flat brim",
-    images: [
-      "/images/optimized/k7 (1).webp",
-      "/images/optimized/k7 (2).webp",
-      "/images/optimized/k7 (3).webp",
-      "/images/optimized/k7 (4).webp",
-    ],
-    sizes: ["7 1/4", "7 1/2"],
-    description: "Trendy graphic t-shirt with bold designs.",
-  },
+
   {
     id: "baby-pink-cream-ny-fitted",
     name: "Baby Pink - Cream NY Fitted",
@@ -142,7 +116,7 @@ export const products: Product[] = [
   },
   {
     id: "adjustable-palm-sox-new-era",
-    name: "Adjustable Palm SOX New Era",
+    name: "Adjustable Palm SOX New Era (Sold Out)",
     category: "cape",
     type: "curved brim",
     images: [
@@ -151,7 +125,7 @@ export const products: Product[] = [
       "/images/optimized/k11 (3).webp",
       "/images/optimized/k11 (4).webp",
     ],
-    sizes: ["7 1/4", "7 3/8", "7 1/2"],
+    sizes: ["Sold Out"],
     description: "Durable cargo pants with a stylish urban edge.",
   },
   {
@@ -167,6 +141,36 @@ export const products: Product[] = [
     ],
     sizes: ["7 3/8", "7 1/2"],
     description: "Soft, oversized sweatshirt for cozy vibes.",
+  },
+
+    {
+    id: "black-&-white-fitted-pirates",
+    name: "Black & White Fitted Pirates (Sold Out)",
+    category: "cape",
+    type: "curved brim",
+    images: [
+      "/images/optimized/k1 (1).webp",
+      "/images/optimized/k1 (2).webp",
+      "/images/optimized/k1 (3).webp",
+      "/images/optimized/k1 (4).webp",
+    ],
+    sizes: ["Sold Out"],
+    description: "A cozy hoodie perfect for every day.",
+  },
+
+    {
+    id: "green-tone-sox-fitted",
+    name: "Green-Tone SOX Fitted (Sold Out)",
+    category: "cape",
+    type: "flat brim",
+    images: [
+      "/images/optimized/k7 (1).webp",
+      "/images/optimized/k7 (2).webp",
+      "/images/optimized/k7 (3).webp",
+      "/images/optimized/k7 (4).webp",
+    ],
+    sizes: ["Sold Out"],
+    description: "Trendy graphic t-shirt with bold designs.",
   },
 
   // === ACCESSORIES (only 4) ===

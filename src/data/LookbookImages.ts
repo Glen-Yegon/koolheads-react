@@ -1,5 +1,5 @@
 const imageList: string[] = [
- "/images/optimized/l (51).webp",
+    "/images/optimized/l (72).webp",
   "/images/optimized/l (52).webp",
   "/images/optimized/l (53).webp",
   "/images/optimized/l (54).webp",
@@ -20,7 +20,7 @@ const imageList: string[] = [
   "/images/optimized/l (69).webp",
   "/images/optimized/l (70).webp",
   "/images/optimized/l (71).webp",
-  "/images/optimized/l (72).webp",
+
   "/images/optimized/l (73).webp",
   "/images/optimized/l (74).webp",
   "/images/optimized/l (75).webp",
@@ -32,11 +32,8 @@ const imageList: string[] = [
   "/images/optimized/l (81).webp",
   "/images/optimized/l (82).webp",
   "/images/optimized/l (1).webp",
-  "/images/optimized/l (2).webp",
-  "/images/optimized/l (3).webp",
-  "/images/optimized/l (4).webp",
-  "/images/optimized/l (5).webp",
-  "/images/optimized/l (6).webp",
+
+
 
   "/images/optimized/l (18).webp",
 
