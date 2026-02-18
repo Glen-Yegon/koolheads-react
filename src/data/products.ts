@@ -40,7 +40,7 @@ export const products: Product[] = [
       "/images/optimized/k4 (3).webp",
       "/images/optimized/k4 (4).webp",
     ],
-    sizes: ["7 1/4", "7 3/8", "7 1/2"],
+    sizes: ["SOLD OUT"],
     description: "Premium leather jacket for a bold look.",
   },
   {
@@ -54,7 +54,7 @@ export const products: Product[] = [
       "/images/optimized/k5 (3).webp",
       "/images/optimized/k5 (4).webp",
     ],
-    sizes: ["7 1/4", "7 3/8", "7 1/2"],
+    sizes: ["7 1/4"],
     description: "Sneakers with ultimate comfort and style.",
   },
   {
@@ -68,7 +68,7 @@ export const products: Product[] = [
       "/images/optimized/k6 (3).webp",
       "/images/optimized/k6 (4).webp",
     ],
-    sizes: ["7 1/4", "7 1/2"],
+    sizes: ["SOLD OUT"],
     description: "Classic denim jeans for any occasion.",
   },
 
@@ -97,7 +97,7 @@ export const products: Product[] = [
       "/images/optimized/k9 (3).webp",
       "/images/optimized/k9 (4).webp",
     ],
-    sizes: ["7 1/4", "7 3/8", "7 1/2"],
+    sizes: ["SOLD OUT"],
     description: "Sleek and functional backpack for daily use.",
   },
   {
@@ -139,7 +139,7 @@ export const products: Product[] = [
       "/images/optimized/k12 (3).webp",
       "/images/optimized/k12 (4).webp",
     ],
-    sizes: ["7 3/8", "7 1/2"],
+    sizes: ["SOLD OUT"],
     description: "Soft, oversized sweatshirt for cozy vibes.",
   },
 
