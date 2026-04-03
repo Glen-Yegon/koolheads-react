@@ -230,5 +230,5 @@ export const products: Product[] = [
 
 // === Add prices automatically based on category ===
 products.forEach((p) => {
-  p.price = p.category === "cape" ? 1500 : 400;
+  p.price = p.category === "cape" ? 1000 : 400;
 });
