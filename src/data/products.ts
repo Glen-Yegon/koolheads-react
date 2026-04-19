@@ -31,7 +31,7 @@ export const products: Product[] = [
   },
   {
     id: "brown-&-white-giants-fitted",
-    name: "Brown & White Giants Fitted",
+    name: "Brown & White Giants Fitted (SOLD OUT)",
     category: "cape",
     type: "curved brim",
     images: [
@@ -45,7 +45,7 @@ export const products: Product[] = [
   },
   {
     id: "blue-&-white-dodgers-fitted",
-    name: "Blue & White Dodgers Fitted",
+    name: "Blue & White Dodgers Fitted (SOLD OUT)",
     category: "cape",
     type: "curved brim",
     images: [
@@ -54,12 +54,12 @@ export const products: Product[] = [
       "/images/optimized/k5 (3).webp",
       "/images/optimized/k5 (4).webp",
     ],
-    sizes: ["7 1/4"],
+    sizes: ["SOLD OUT"],
     description: "Sneakers with ultimate comfort and style.",
   },
   {
     id: "purple-gray-ny-fitted",
-    name: "Purple-Gray NY Fitted",
+    name: "Purple-Gray NY Fitted (SOLD OUT)",
     category: "cape",
     type: "flat brim",
     images: [
@@ -88,7 +88,7 @@ export const products: Product[] = [
   },
   {
     id: "cupid-love-sox-fitted",
-    name: "Cupid Love SOX Fitted",
+    name: "Cupid Love SOX Fitted (SOLD OUT)",
     category: "cape",
     type: "flat brim",
     images: [
@@ -116,7 +116,7 @@ export const products: Product[] = [
   },
   {
     id: "adjustable-palm-sox-new-era",
-    name: "Adjustable Palm SOX New Era (Sold Out)",
+    name: "Adjustable Palm SOX New Era (SOLD OUT)",
     category: "cape",
     type: "curved brim",
     images: [
@@ -130,7 +130,7 @@ export const products: Product[] = [
   },
   {
     id: "red-floral-black-chocolate-fitted",
-    name: "Red Floral Black-Chocolate Fitted",
+    name: "Red Floral Black-Chocolate Fitted (SOLD OUT)",
     category: "cape",
     type: "flat brim",
     images: [
@@ -145,7 +145,7 @@ export const products: Product[] = [
 
     {
     id: "black-&-white-fitted-pirates",
-    name: "Black & White Fitted Pirates (Sold Out)",
+    name: "Black & White Fitted Pirates (SOLD OUT)",
     category: "cape",
     type: "curved brim",
     images: [
@@ -160,7 +160,7 @@ export const products: Product[] = [
 
     {
     id: "green-tone-sox-fitted",
-    name: "Green-Tone SOX Fitted (Sold Out)",
+    name: "Green-Tone SOX Fitted (SOLD OUT)",
     category: "cape",
     type: "flat brim",
     images: [
